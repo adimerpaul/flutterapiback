@@ -69,11 +69,12 @@ class _HomeState extends State<Home> {
       floatingActionButton: FloatingActionButton(
         foregroundColor: Colors.white,
         backgroundColor: Colors.red,
-        onPressed: () {
-          Navigator.push(
+        onPressed: () async {
+          await Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const Formulario()),
           );
+          productGet();
         },
         child: const Icon(Icons.add),
       ),

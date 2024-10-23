@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'dart:convert' as convert;
+import 'package:http/http.dart' as http;
 
 class Formulario extends StatefulWidget {
   const Formulario({super.key});
@@ -14,9 +17,17 @@ class _FormularioState extends State<Formulario> {
   TextEditingController amountController = TextEditingController();
 
   registrar() {
-    print(nameController.text);
-    print(priceController.text);
-    print(amountController.text);
+    var url = Uri.parse(dotenv.env['API_BACK']!+'/products');
+    http.post(url, body: {
+      'name': nameController.text,
+      'price': priceController.text,
+      'amount': amountController.text,
+    }).then((value) {
+      print(value.statusCode);
+      if (value.statusCode == 201) {
+        Navigator.pop(context);
+      }
+    });
   }
   @override
   Widget build(BuildContext context) {
