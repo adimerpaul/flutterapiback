@@ -1,3 +1,4 @@
+import 'package:apiback/pages/formulario.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
@@ -20,7 +21,7 @@ class _HomeState extends State<Home> {
     productGet();
   }
   productGet() async {
-    var url = Uri.parse('https://4d1f-2800-cd0-afd1-6b00-f1-4439-1487-f3b1.ngrok-free.app/api/products');
+    var url = Uri.parse('http://localhost:8000/api/products');
     var response = await http.get(url);
     if (response.statusCode == 200) {
       var jsonResponse = convert.jsonDecode(response.body);
@@ -40,15 +41,17 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home'),
+        title: const Text('Productos'),
+        backgroundColor: Colors.red,
+        foregroundColor: Colors.white,
       ),
       body: Column(
         children: [
-          Text('Contador: $contador'),
-          ElevatedButton(
-            onPressed: aumentar,
-            child: const Text('Aumentar'),
-          ),
+          // Text('Contador: $contador'),
+          // ElevatedButton(
+          //   onPressed: productGet,
+          //   child: const Text('Actulizar'),
+          // ),
           Expanded(
             child: ListView.builder(
               itemCount: products.length,
@@ -61,6 +64,17 @@ class _HomeState extends State<Home> {
             ),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        foregroundColor: Colors.white,
+        backgroundColor: Colors.red,
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const Formulario()),
+          );
+        },
+        child: const Icon(Icons.add),
       ),
     );
   }
