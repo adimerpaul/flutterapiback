@@ -34,6 +34,13 @@ class _FormularioState extends State<Formulario> {
     }
   }
   registrar() {
+    if (nameController.text.isEmpty || priceController.text.isEmpty || amountController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Todos los campos son requeridos'),
+        ),
+      );
+    }
     var url = Uri.parse(dotenv.env['API_BACK']!+'/products');
     http.post(url, body: {
       'name': nameController.text,
