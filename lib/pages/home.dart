@@ -82,13 +82,51 @@ class _HomeState extends State<Home> {
                       IconButton(
                         icon: const Icon(Icons.delete),
                         onPressed: () async {
-                          var url = Uri.parse(dotenv.env['API_BACK']!+'/products/'+products[index]['id'].toString());
-                          var response = await http.delete(url);
-                          if (response.statusCode == 200) {
-                            productGet();
-                          } else {
-                            print('Request failed with status: ${response.statusCode}.');
-                          }
+                          return showDialog<void>(
+                            context: context,
+                            barrierDismissible: false, // user must tap button!
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text('Se eliminará el producto'),
+                                // content: const SingleChildScrollView(
+                                //   child: ListBody(
+                                //     children: <Widget>[
+                                //       Text('This is a demo alert dialog.'),
+                                //       Text('Would you like to approve of this message?'),
+                                //     ],
+                                //   ),
+                                // ),
+                                actions: <Widget>[
+                                  TextButton(
+                                    child: const Text('Eliminar'),
+                                    onPressed: () async {
+                                      var url = Uri.parse(dotenv.env['API_BACK']!+'/products/'+products[index]['id'].toString());
+                                      var response = await http.delete(url);
+                                      if (response.statusCode == 200) {
+                                        productGet();
+                                      } else {
+                                        print('Request failed with status: ${response.statusCode}.');
+                                      }
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                  TextButton(
+                                    child: const Text('Cancel'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                          // var url = Uri.parse(dotenv.env['API_BACK']!+'/products/'+products[index]['id'].toString());
+                          // var response = await http.delete(url);
+                          // if (response.statusCode == 200) {
+                          //   productGet();
+                          // } else {
+                          //   print('Request failed with status: ${response.statusCode}.');
+                          // }
                         },
                       ),
                     ],
