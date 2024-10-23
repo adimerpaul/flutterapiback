@@ -9,6 +9,15 @@ class Formulario extends StatefulWidget {
 }
 
 class _FormularioState extends State<Formulario> {
+  TextEditingController nameController = TextEditingController();
+  TextEditingController priceController = TextEditingController();
+  TextEditingController amountController = TextEditingController();
+
+  registrar() {
+    print(nameController.text);
+    print(priceController.text);
+    print(amountController.text);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,16 +26,36 @@ class _FormularioState extends State<Formulario> {
         backgroundColor: Colors.red,
         foregroundColor: Colors.white,
       ),
-      body: Column(
-        children: [
-          const Text('Formulario'),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Text('Regresar'),
-          ),
-        ],
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            TextField(
+              controller: nameController,
+              decoration: const InputDecoration(
+                labelText: 'Nombre',
+              ),
+            ),
+            TextField(
+              controller: priceController,
+              decoration: const InputDecoration(
+                labelText: 'Precio',
+              ),
+              keyboardType: TextInputType.number,
+            ),
+            TextField(
+              controller: amountController,
+              decoration: const InputDecoration(
+                labelText: 'Cantidad',
+              ),
+              keyboardType: TextInputType.number,
+            ),
+            ElevatedButton(
+              onPressed: registrar,
+              child: const Text('Guardar'),
+            ),
+          ],
+        ),
       ),
     );
   }

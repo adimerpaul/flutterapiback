@@ -1,5 +1,6 @@
 import 'package:apiback/pages/formulario.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 
@@ -21,7 +22,7 @@ class _HomeState extends State<Home> {
     productGet();
   }
   productGet() async {
-    var url = Uri.parse('http://localhost:8000/api/products');
+    var url = Uri.parse(dotenv.env['API_BACK']!+'/products');
     var response = await http.get(url);
     if (response.statusCode == 200) {
       var jsonResponse = convert.jsonDecode(response.body);
