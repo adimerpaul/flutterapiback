@@ -5,7 +5,17 @@ import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 
 class Formulario extends StatefulWidget {
-  const Formulario({super.key});
+  final int? id;
+  final String? name;
+  final String? price;
+  final String? amount;
+  const Formulario({
+    super.key,
+    this.id,
+    this.name,
+    this.price,
+    this.amount,
+  });
 
   @override
   State<Formulario> createState() => _FormularioState();
@@ -15,7 +25,14 @@ class _FormularioState extends State<Formulario> {
   TextEditingController nameController = TextEditingController();
   TextEditingController priceController = TextEditingController();
   TextEditingController amountController = TextEditingController();
-
+  initState() {
+    super.initState();
+    if (widget.id != null) {
+      nameController.text = widget.name!;
+      priceController.text = widget.price!;
+      amountController.text = widget.amount!;
+    }
+  }
   registrar() {
     var url = Uri.parse(dotenv.env['API_BACK']!+'/products');
     http.post(url, body: {
@@ -61,6 +78,24 @@ class _FormularioState extends State<Formulario> {
               ),
               keyboardType: TextInputType.number,
             ),
+            widget.id != null
+                ? ElevatedButton(
+                    onPressed: () {
+                      var url = Uri.parse(dotenv.env['API_BACK']!+'/products/${widget.id}');
+                      http.put(url, body: {
+                        'name': nameController.text,
+                        'price': priceController.text,
+                        'amount': amountController.text,
+                      }).then((value) {
+                        print(value.statusCode);
+                        if (value.statusCode == 200) {
+                          Navigator.pop(context);
+                        }
+                      });
+                    },
+                    child: const Text('Actualizar'),
+                  )
+                :
             ElevatedButton(
               onPressed: registrar,
               child: const Text('Guardar'),

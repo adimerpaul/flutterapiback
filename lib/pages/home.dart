@@ -49,10 +49,10 @@ class _HomeState extends State<Home> {
       body: Column(
         children: [
           // Text('Contador: $contador'),
-          // ElevatedButton(
-          //   onPressed: productGet,
-          //   child: const Text('Actulizar'),
-          // ),
+          ElevatedButton(
+            onPressed: productGet,
+            child: const Text('Actualizar'),
+          ),
           Expanded(
             child: ListView.builder(
               itemCount: products.length,
@@ -60,6 +60,51 @@ class _HomeState extends State<Home> {
                 return ListTile(
                   title: Text(products[index]['name'].toString()),
                   subtitle: Text(products[index]['price'].toString()),
+                  // leading: Text(products[index]['amount'].toString()),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.edit),
+                        onPressed: () async {
+                          await Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Formulario(
+                              id: products[index]['id'],
+                              name: products[index]['name'],
+                              price: products[index]['price'],
+                              amount: products[index]['amount'],
+                            )),
+                          );
+                          productGet();
+                        },
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.delete),
+                        onPressed: () async {
+                          var url = Uri.parse(dotenv.env['API_BACK']!+'/products/'+products[index]['id'].toString());
+                          var response = await http.delete(url);
+                          if (response.statusCode == 200) {
+                            productGet();
+                          } else {
+                            print('Request failed with status: ${response.statusCode}.');
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                  // trailing: IconButton(
+                  //   icon: const Icon(Icons.delete),
+                  //   onPressed: () async {
+                  //     var url = Uri.parse(dotenv.env['API_BACK']!+'/products/'+products[index]['id'].toString());
+                  //     var response = await http.delete(url);
+                  //     if (response.statusCode == 200) {
+                  //       productGet();
+                  //     } else {
+                  //       print('Request failed with status: ${response.statusCode}.');
+                  //     }
+                  //   },
+                  // ),
                 );
               },
             ),
