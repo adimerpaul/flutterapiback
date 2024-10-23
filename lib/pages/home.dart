@@ -60,7 +60,19 @@ class _HomeState extends State<Home> {
                 return ListTile(
                   title: Text(products[index]['name'].toString()),
                   subtitle: Text(products[index]['price'].toString()),
-                  // leading: Text(products[index]['amount'].toString()),
+                  leading: Image.network(
+                    'http://ed27-2800-cd0-afd1-6b00-450f-f7bb-922-d8e6.ngrok-free.app/images/1.png',
+                    width: 50,
+                    height: 50,
+                    errorBuilder: (context, error, stackTrace) {
+                      print(error);
+                      return Icon(Icons.error); // Muestra un ícono de error si falla la carga
+                    },
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return CircularProgressIndicator(); // Muestra un indicador de carga mientras se descarga la imagen
+                    },
+                  ),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
