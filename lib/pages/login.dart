@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:localstorage/localstorage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'home.dart'; // Para convertir respuestas JSON
 
@@ -15,10 +16,22 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
   initState() {
     super.initState();
     _emailController.text = 'admin@gmail.com';
     _passwordController.text = 'admin';
+    _checkToken();
+  }
+  Future<void> _checkToken() async {
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    var token = localStorage.getString('token');
+    if (token != null) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => Home()),  // Reemplaza con tu pantalla Home
+      );
+    }
   }
 
   // Método para manejar el login
