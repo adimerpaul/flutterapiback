@@ -61,7 +61,7 @@ class _HomeState extends State<Home> {
                   title: Text(products[index]['name'].toString()),
                   subtitle: Text(products[index]['price'].toString()),
                   leading: Image.network(
-                    'http://ed27-2800-cd0-afd1-6b00-450f-f7bb-922-d8e6.ngrok-free.app/images/1.png',
+                    dotenv.env['API_BACK']!+'/../images/1.png',
                     width: 50,
                     height: 50,
                     errorBuilder: (context, error, stackTrace) {
