@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
+import 'package:localstorage/localstorage.dart';
 
 class Formulario extends StatefulWidget {
   final int? id;
@@ -42,10 +43,13 @@ class _FormularioState extends State<Formulario> {
       );
     }
     var url = Uri.parse(dotenv.env['API_BACK']!+'/products');
+    var token = localStorage.getItem('token');
     http.post(url, body: {
       'name': nameController.text,
       'price': priceController.text,
       'amount': amountController.text,
+    }, headers: {
+      'Authorization': 'Bearer $token',
     }).then((value) {
       print(value.statusCode);
       if (value.statusCode == 201) {
@@ -88,11 +92,14 @@ class _FormularioState extends State<Formulario> {
             widget.id != null
                 ? ElevatedButton(
                     onPressed: () {
+                      var token = localStorage.getItem('token');
                       var url = Uri.parse(dotenv.env['API_BACK']!+'/products/${widget.id}');
                       http.put(url, body: {
                         'name': nameController.text,
                         'price': priceController.text,
                         'amount': amountController.text,
+                      }, headers: {
+                      'Authorization': 'Bearer $token',
                       }).then((value) {
                         print(value.statusCode);
                         if (value.statusCode == 200) {

@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert'; // Para convertir respuestas JSON
+import 'dart:convert';
+
+import 'package:localstorage/localstorage.dart';
+
+import 'home.dart'; // Para convertir respuestas JSON
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -11,6 +15,11 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  initState() {
+    super.initState();
+    _emailController.text = 'admin@gmail.com';
+    _passwordController.text = 'admin';
+  }
 
   // Método para manejar el login
   Future<void> _login() async {
@@ -38,11 +47,19 @@ class _LoginScreenState extends State<LoginScreen> {
       final Map<String, dynamic> responseData = jsonDecode(response.body);
       final String token = responseData['token'];  // Ejemplo si la API retorna un token
       print('Login exitoso, Token: $token');
-
-      // Redirigir o guardar token, etc.
+      localStorage.setItem('token', token);
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Home()),
+      );
     } else {
       // Hubo un error en la solicitud
       print('Error en el login: ${response.statusCode}');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Error en el login, verifique sus credenciales'),
+        ),
+      );
     }
   }
 
